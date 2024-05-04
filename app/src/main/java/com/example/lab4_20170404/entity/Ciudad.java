@@ -1,11 +1,13 @@
 package com.example.lab4_20170404.entity;
 
+import java.util.Map;
+
 public class Ciudad {
 
     private String name;
-    private LocalNames localNames;
-    private Double lat;
-    private Double lon;
+    private Map<String, String> localNames;
+    private double lat;
+    private double lon;
     private String country;
     private String state;
 
@@ -17,27 +19,27 @@ public class Ciudad {
         this.name = name;
     }
 
-    public LocalNames getLocalNames() {
+    public Map<String, String> getLocalNames() {
         return localNames;
     }
 
-    public void setLocalNames(LocalNames localNames) {
+    public void setLocalNames(Map<String, String> localNames) {
         this.localNames = localNames;
     }
 
-    public Double getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Double getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(Double lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
@@ -56,4 +58,6 @@ public class Ciudad {
     public void setState(String state) {
         this.state = state;
     }
+
+
 }

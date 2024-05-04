@@ -9,8 +9,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface GeocodingService {
-    @GET("/")
-    Call<Ciudad> obtenerCiudad(
+    @GET("/geo/1.0/direct")
+    Call<List<Ciudad>> obtenerCiudad(
             @Query("q") String ciudad,
             @Query("limit") String limit,
             @Query("appid") String apikey

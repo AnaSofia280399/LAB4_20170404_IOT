@@ -1,9 +1,16 @@
 package com.example.lab4_20170404;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,10 +41,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_main);
+        setContentView(binding.getRoot());
+        EdgeToEdge.enable(this);
 
-        //------conexion api
-        createRetrofitService();
+        //Ingreso a los fragments
+
+        binding.botonIngresar.setOnClickListener(v -> {
+            if (!internet_access()) {
+                internet_off_dialog();
+            } else {
+                startActivity(new Intent(MainActivity.this, NavigationActivity.class));
+            }
+        });
+
+        //------conexion api prueba....
+
+        //createRetrofitService();
 
 
         //String movieId = getIntent().getStringExtra("idmb_peli");
@@ -46,22 +65,7 @@ public class MainActivity extends AppCompatActivity {
         String apikey = "8dd6fc3be19ceb8601c2c3e811c16cf1";
         String limit = "1";
 
-        geocodingService.obtenerCiudad(nombre_Ciudad, limit, apikey).enqueue(new Callback<Ciudad>() {
-            @Override
-            public void onResponse(Call<Ciudad> call, Response<Ciudad> response) {
-                if (response.isSuccessful()){
-                    Ciudad body = response.body();
-                }
 
-            }
-
-            @Override
-            public void onFailure(Call<Ciudad> call, Throwable t) {
-                Log.d(TAG, "algo pasó je!!!");
-                t.printStackTrace();
-
-            }
-        });
 
 
     }
@@ -75,6 +79,35 @@ public class MainActivity extends AppCompatActivity {
                 .build()
                 .create(GeocodingService.class);
 
+    }
+
+    public boolean internet_access() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void internet_off_dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No hay conexión a Internet");
+        builder.setMessage("Para utilizar esta aplicación es necesario tener una conexión a Internet.");
+        builder.setPositiveButton("Configuración", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Abrir la configuración de red del dispositivo
+                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Cerrar la actividad o realizar alguna otra acción si se desea
+                // Por ejemplo, puedes llamar a finish() para cerrar la actividad
+                finish();
+            }
+        });
+        builder.setCancelable(false); // Evita que se pueda cerrar el cuadro de diálogo con clic fuera de él
+        builder.show();
     }
 
 
