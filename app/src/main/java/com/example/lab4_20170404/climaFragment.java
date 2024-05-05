@@ -1,16 +1,34 @@
 package com.example.lab4_20170404;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.lab4_20170404.Recycler.ClimaAdapter;
+import com.example.lab4_20170404.api.WeatherService;
 import com.example.lab4_20170404.databinding.FragmentClimaBinding;
+import com.example.lab4_20170404.entity.Clima;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -22,6 +40,14 @@ import com.example.lab4_20170404.databinding.FragmentClimaBinding;
 public class climaFragment extends Fragment {
 
     FragmentClimaBinding climaBinding;
+
+    private List<Clima> search_clima = new ArrayList<>();
+    //Lista de Ciudades ^
+
+    //------API
+    WeatherService weatherService;
+
+    //-----------
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,9 +95,36 @@ public class climaFragment extends Fragment {
 
         climaBinding= climaBinding.inflate(inflater, container, false);
 
+        //----------Llamada Weather Service----
+
+        weatherService = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(WeatherService.class);
+
+        //-------------
+
+       /* climaBinding.ClimaButtonSearch.setOnClickListener(view -> {
+            fetchInfo(climaBinding.ClimaLatitudSearch.getQuery().toString(), climaBinding.buscarLongitud.getQuery().toString());
+        }); */
+
+        climaBinding.ClimaButtonSearch.setOnClickListener(view -> {
+            String latitud = climaBinding.ClimaLatitudSearch.getQuery().toString().trim();
+            String longitud = climaBinding.buscarLongitud.getQuery().toString().trim();
+
+            if (!latitud.isEmpty() && !longitud.isEmpty()) {
+                fetchInfo(latitud, longitud);
+            } else {
+                // Muestra un mensaje de error si alguno de los campos está vacío
+                Toast.makeText(view.getContext(), "Por favor, ingresa valores de latitud y longitud.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
         NavController navController = NavHostFragment.findNavController(climaFragment.this);
-
-
         climaBinding.geoDeClima.setOnClickListener(view -> {
 
             navController.navigate(R.id.action_nav_gallery_to_nav_home);
@@ -82,5 +135,46 @@ public class climaFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return climaBinding.getRoot();
+    }
+
+    public void fetchInfo(String lat, String lon) {
+        if (InternetAccess()) {
+            weatherService.getClima(lat, lon, "792edf06f1f5ebcaf43632b55d8b03fe").enqueue(new Callback<Clima>() {
+                @Override
+                public void onResponse(Call<Clima> call, Response<Clima> response) {
+                    if (response.isSuccessful()) {
+                        Clima clima = response.body();
+                        if (clima != null) {
+                            search_clima.add(clima);
+
+                            ClimaAdapter climaAdapter = new ClimaAdapter();
+                            climaAdapter.setListaClima(search_clima);
+                            climaBinding.recycleClima.setAdapter(climaAdapter);
+                            climaBinding.recycleClima.setLayoutManager(new LinearLayoutManager(getContext()));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Clima> call, Throwable t) {
+                    Log.e("fetchInfo", "Error al realizar la solicitud: " + t.getMessage());
+                    t.printStackTrace();
+                }
+            });
+        } else {
+            Log.d("fetchInfo", "No hay conexión a internet");
+        }
+    }
+
+    public boolean InternetAccess() {
+        Context context = getActivity();
+        if (context != null) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager != null) {
+                NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+        return false;
     }
 }

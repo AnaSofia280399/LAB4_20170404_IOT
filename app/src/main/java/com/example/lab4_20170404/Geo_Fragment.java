@@ -1,6 +1,10 @@
 package com.example.lab4_20170404;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -8,15 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.lab4_20170404.Recycler.GeoAdapter;
 import com.example.lab4_20170404.api.GeocodingService;
 import com.example.lab4_20170404.databinding.FragmentGeoBinding;
 import com.example.lab4_20170404.entity.Ciudad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,6 +44,14 @@ public class Geo_Fragment extends Fragment {
     GeocodingService geocodingService;
 
     FragmentGeoBinding fragmentGeoBinding;
+    //-----Sensor (prueba)
+    SensorManager sensorManager;
+
+
+
+    private List<Ciudad> ciudad_search = new ArrayList<>();
+    //Lista de Ciudades ^
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +63,7 @@ public class Geo_Fragment extends Fragment {
     private String mParam2;
 
     public Geo_Fragment() {
-        // Required empty public constructor
+        // Empty public constructor
     }
 
     /**
@@ -85,16 +101,50 @@ public class Geo_Fragment extends Fragment {
         fragmentGeoBinding = FragmentGeoBinding.inflate(inflater, container, false);
 
 
-        //API
+        //-------------------llamado a la Api
         geocodingService = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(GeocodingService.class);
-        //
+        //----------------------------------
 
-        fetchInfo("London");
-        System.out.println("La cidua es");
+        //---------SENSORES----------------
+
+        sensorManager = (SensorManager) requireContext().getSystemService(SENSOR_SERVICE);
+
+        if (sensorManager != null){
+
+            Sensor acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            Sensor magnetometro = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+            if (magnetometro != null ){
+                Toast.makeText(requireContext(), "Magnenometro Ok", Toast.LENGTH_SHORT).show();
+
+            }else {
+                Toast.makeText(requireContext(), "No cuenta con Magnenometro", Toast.LENGTH_SHORT).show();
+            }
+
+            if (acelerometro != null ){
+                Toast.makeText(requireContext(), "Acelerometro Ok", Toast.LENGTH_SHORT).show();
+
+            }else {
+                Toast.makeText(requireContext(), "No cuenta con Acelerometro", Toast.LENGTH_SHORT).show();
+            }
+
+            //vista de sensores....
+
+            List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
+            for(Sensor sensor : sensorList){
+                Log.d("msg-test-sensorList","sensorName: " + sensor.getName());
+            }
+
+        } else{
+            Toast.makeText(requireContext(), "Su dispositivo no posee sensores :(", Toast.LENGTH_SHORT).show();
+        }
+
+        //--------------------------------------
+
+
 
 
 
@@ -103,28 +153,50 @@ public class Geo_Fragment extends Fragment {
 
             navController.navigate(R.id.action_nav_home_to_nav_gallery);
         });
+
+        //ingreso de datos a buscar
+
+        /*fragmentGeoBinding.GEOButtonSearch.setOnClickListener(view -> {
+            fetchInfo(fragmentGeoBinding.GeobuscarCiudad.getQuery().toString());
+        });
         // Inflate the layout for this fragment
+        return fragmentGeoBinding.getRoot(); */
+
+        fragmentGeoBinding.GEOButtonSearch.setOnClickListener(view -> {
+            String query = fragmentGeoBinding.GeobuscarCiudad.getQuery().toString().trim(); // Obtiene el texto y elimina espacios al inicio y al final
+            if (!query.isEmpty()) {
+                fetchInfo(query);
+            } else {
+                // Muestra un mensaje de error si el campo está vacío
+                Toast.makeText(view.getContext(), "Por favor, ingresa un nombre de ciudad para buscar.", Toast.LENGTH_LONG).show();
+            }
+        });
         return fragmentGeoBinding.getRoot();
     }
 
-    public void fetchInfo(String ciudad) {
-        if (tengoInternet()) {
-            geocodingService.obtenerCiudad(ciudad, "1", "8dd6fc3be19ceb8601c2c3e811c16cf1").enqueue(new Callback<List<Ciudad>>() {
+    public void fetchInfo(String Nombre_ciudad) {
+        if (InternetAccess()) {
+            geocodingService.obtenerCiudad(Nombre_ciudad, "1", "8dd6fc3be19ceb8601c2c3e811c16cf1").enqueue(new Callback<List<Ciudad>>() {
                 @Override
                 public void onResponse(Call<List<Ciudad>> call, Response<List<Ciudad>> response) {
                     if (response.isSuccessful()) {
-                        List<Ciudad> ciudades = response.body();
-                        if (ciudades != null && !ciudades.isEmpty()) {
-                            Ciudad dtoCiudad = ciudades.get(0);
-                            fragmentGeoBinding.textView3.setText(dtoCiudad.getName());
-                            System.out.println("La ciudad es " + dtoCiudad.getName());
+                        List<Ciudad> ciudadList = response.body();
+                        if (ciudadList != null && !ciudadList.isEmpty()) {
+                            Ciudad ciudad = ciudadList.get(0);
+                            ciudad_search.addAll(ciudadList);
+
+                            GeoAdapter geoAdapter = new GeoAdapter();
+                            geoAdapter.setListaCiudad(ciudad_search);
+                            fragmentGeoBinding.recycleGeo.setAdapter(geoAdapter);
+                            fragmentGeoBinding.recycleGeo.setLayoutManager(new LinearLayoutManager(getContext()));
+
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
-                    Log.e("fetchInfo", "Error al realizar la solicitud: " + t.getMessage());
+                    Log.e("fetchInfo", "Error solicitud: " + t.getMessage());
                     t.printStackTrace();
                 }
             });
@@ -134,19 +206,16 @@ public class Geo_Fragment extends Fragment {
     }
 
 
-    public boolean tengoInternet() {
-        // Obtener la actividad asociada al Fragment
+    public boolean InternetAccess() {
         Context context = getActivity();
         if (context != null) {
-            // Obtener el servicio ConnectivityManager desde el contexto de la actividad
             ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (manager != null) {
-                // Obtener información de la red
                 NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
                 return activeNetworkInfo != null && activeNetworkInfo.isConnected();
             }
         }
-        return false; // Si no se pudo obtener el servicio o no hay conexión, retornar falso
+        return false;
     }
 
 

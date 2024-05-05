@@ -11,91 +11,117 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/buscarLongitud"
-        android:layout_width="155dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="145dp"
+        android:layout_height="50dp"
         android:background="@drawable/round_border_item"
         android:focusable="false"
-        app:closeIcon="@drawable/baseline_1x_mobiledata_24"
+        app:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
         app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintHorizontal_bias="0.582"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.149"
         app:queryHint="Longitud" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/buscarLatitud"
-            android:layout_width="155dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/round_border_item"
-            android:focusable="false"
-            app:closeIcon="@drawable/baseline_1x_mobiledata_24"
-            app:hideNavigationIcon="false"
-            app:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="Latitud" />
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/Clima_LatitudSearch"
+        android:layout_width="145dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round_border_item"
+        android:focusable="false"
+        app:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
+        app:hideNavigationIcon="false"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.018"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.149"
+        app:queryHint="Latitud" />
 
-        <Button
-            android:id="@+id/botonBuscarClima"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:backgroundTint="#3F51B5"
-            android:text="Buscar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/Clima_buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/nav_bar"
+        android:text="Buscar"
+        android:fontFamily="@font/comfortaa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.148" />
 
-        <LinearLayout
-            android:id="@+id/toolbar_geo"
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/nav_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#3F51B5"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-
-            <Button
-                android:id="@+id/geoDeClima"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:text="Geolocalización"
-                android:textColor="#3F51B5"
-                android:textStyle="bold" />
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/climaDeClima"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/comfortaa"
                 android:backgroundTint="#FFFFFF"
                 android:text="Clima"
-                android:textColor="#3F51B5"
-                android:textStyle="bold" />
+                android:textColor="@color/nav_bar"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.942"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/geoDeClima"
+                android:layout_width="172dp"
+                android:fontFamily="@font/comfortaa"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
+                android:text="Geolocalización"
+                android:textColor="@color/nav_bar"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.07"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="148dp"
         android:layout_height="45dp"
+        android:gravity="center"
         android:text="Buscar clima"
         android:textColor="#FFFFFF"
-        android:gravity="center"
+        android:fontFamily="@font/comfortaa"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -109,7 +135,7 @@
         android:id="@+id/recycleClima"
         android:layout_width="401dp"
         android:layout_height="410dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_geo"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

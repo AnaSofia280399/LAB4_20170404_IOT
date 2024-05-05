@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     //------conexion api
     GeocodingService geocodingService;
+    //---------------------------------------------
     private static String TAG = "msg-mainAct";
 
     @Override
@@ -72,14 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Webservice
 
-    public void createRetrofitService( ){
-        geocodingService = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/geo/1.0/direct")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(GeocodingService.class);
-
-    }
 
     public boolean internet_access() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -89,24 +82,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void internet_off_dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("No hay conexión a Internet");
-        builder.setMessage("Para utilizar esta aplicación es necesario tener una conexión a Internet.");
+        builder.setTitle("Sin Conexion a Internet");
+        builder.setMessage("No se pudo establecer una conexión con Internet");
         builder.setPositiveButton("Configuración", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Abrir la configuración de red del dispositivo
                 startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             }
         });
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Cerrar la actividad o realizar alguna otra acción si se desea
-                // Por ejemplo, puedes llamar a finish() para cerrar la actividad
                 finish();
             }
         });
-        builder.setCancelable(false); // Evita que se pueda cerrar el cuadro de diálogo con clic fuera de él
+        builder.setCancelable(false);
         builder.show();
     }
 

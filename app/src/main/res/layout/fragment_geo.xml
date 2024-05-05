@@ -10,12 +10,13 @@
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/buscarCiudad"
+        android:id="@+id/GeobuscarCiudad"
         android:layout_width="255dp"
-        android:layout_height="47dp"
+        android:layout_height="50dp"
+
         android:background="@drawable/round_border_item"
         android:focusable="false"
-        app:closeIcon="@drawable/baseline_1x_mobiledata_24"
+        app:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
         app:iconifiedByDefault="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +33,9 @@
         android:layout_height="34dp"
         android:text="Buscar geolocalización"
         android:textColor="#FFFFFF"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:textStyle="bold"
+        android:fontFamily="@font/comfortaa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -41,53 +43,71 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.045" />
 
+
     <LinearLayout
-        android:id="@+id/toolbar_geo"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3F51B5"
+        android:background="@color/nav_bar"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.975">
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/climaDeGeo"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
+                android:text="Clima"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/nav_bar"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.942"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/geoDeGeo"
+                android:layout_width="172dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
+                android:text="Geolocalización"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/nav_bar"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.07"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
 
-        <Button
-            android:id="@+id/geoDeGeo"
-            android:layout_width="107dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:text="Geolocalización"
-            android:textColor="#3F51B5"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/climaDeGeo"
-            android:paddingLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:text="Clima"
-            android:textColor="#3F51B5"
-            android:textStyle="bold" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/botonBuscarGeo"
+        android:id="@+id/GEO_buttonSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:backgroundTint="#3F51B5"
+        android:backgroundTint="@color/nav_bar"
         android:text="Buscar"
+        android:fontFamily="@font/comfortaa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.949"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,17 +122,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.552" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buscarCiudad" />
+        app:layout_constraintVertical_bias="0.685" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
