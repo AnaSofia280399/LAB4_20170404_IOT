@@ -9,23 +9,59 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/GeobuscarCiudad"
-        android:layout_width="255dp"
-        android:layout_height="50dp"
 
-        android:background="@drawable/round_border_item"
-        android:focusable="false"
-        app:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
-        app:iconifiedByDefault="false"
+    <LinearLayout
+        android:id="@+id/buscadorGeo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.217"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.147"
-        app:queryHint="Ciudad"
-        app:searchHintIcon="@null" />
+        app:layout_constraintVertical_bias="0.111"
+        android:paddingBottom="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/GeobuscarCiudad"
+                android:layout_width="255dp"
+                android:layout_height="50dp"
+
+                android:background="@drawable/round_border_item"
+                android:focusable="false"
+                app:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
+                app:iconifiedByDefault="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.102"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:queryHint="Ciudad"
+                app:searchHintIcon="@null" />
+
+            <Button
+                android:id="@+id/GEO_buttonSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/nav_bar"
+                android:fontFamily="@font/comfortaa"
+                android:text="Buscar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.948"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView2"
@@ -100,19 +136,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/GEO_buttonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:backgroundTint="@color/nav_bar"
-        android:text="Buscar"
-        android:fontFamily="@font/comfortaa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleGeo"
         android:layout_width="403dp"
@@ -121,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        app:layout_constraintTop_toBottomOf="@+id/buscadorGeo"
+        app:layout_constraintVertical_bias="0.403" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
