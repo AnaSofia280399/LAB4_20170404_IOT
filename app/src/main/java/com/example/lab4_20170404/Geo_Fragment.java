@@ -113,35 +113,8 @@ public class Geo_Fragment extends Fragment {
 
         sensorManager = (SensorManager) requireContext().getSystemService(SENSOR_SERVICE);
 
-        if (sensorManager != null){
 
-            Sensor acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            Sensor magnetometro = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-            if (magnetometro != null ){
-                Toast.makeText(requireContext(), "Magnenometro Ok", Toast.LENGTH_SHORT).show();
-
-            }else {
-                Toast.makeText(requireContext(), "No cuenta con Magnenometro", Toast.LENGTH_SHORT).show();
-            }
-
-            if (acelerometro != null ){
-                Toast.makeText(requireContext(), "Acelerometro Ok", Toast.LENGTH_SHORT).show();
-
-            }else {
-                Toast.makeText(requireContext(), "No cuenta con Acelerometro", Toast.LENGTH_SHORT).show();
-            }
-
-            //vista de sensores....
-
-            List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
-            for(Sensor sensor : sensorList){
-                Log.d("msg-test-sensorList","sensorName: " + sensor.getName());
-            }
-
-        } else{
-            Toast.makeText(requireContext(), "Su dispositivo no posee sensores :(", Toast.LENGTH_SHORT).show();
-        }
-
+        
         //--------------------------------------
 
 
@@ -172,6 +145,42 @@ public class Geo_Fragment extends Fragment {
             }
         });
         return fragmentGeoBinding.getRoot();
+    }
+
+
+    private void checkSensorAvailability(SensorManager sensorManager) {
+        if (sensorManager == null) {
+            showToast("Su dispositivo no posee sensores :(");
+            return;
+        }
+
+        checkIndividualSensor(sensorManager, Sensor.TYPE_ACCELEROMETER, "Acelerómetro");
+        checkIndividualSensor(sensorManager, Sensor.TYPE_MAGNETIC_FIELD, "Magnetómetro");
+
+        logAvailableSensors(sensorManager);
+    }
+
+    private void checkIndividualSensor(SensorManager sensorManager, int sensorType, String sensorName) {
+        Sensor sensor = sensorManager.getDefaultSensor(sensorType);
+        if (sensor != null) {
+            showToast(sensorName + " Ok");
+        } else {
+            showToast("No cuenta con " + sensorName);
+        }
+    }
+
+    private void logAvailableSensors(SensorManager sensorManager) {
+        List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        for (Sensor sensor : sensorList) {
+            Log.d("msg-test-sensorList", "sensorName: " + sensor.getName());
+        }
+    }
+
+
+
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void fetchInfo(String Nombre_ciudad) {
