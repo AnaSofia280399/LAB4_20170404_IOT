@@ -188,24 +188,29 @@ public class Geo_Fragment extends Fragment {
             geocodingService.obtenerCiudad(Nombre_ciudad, "1", "8dd6fc3be19ceb8601c2c3e811c16cf1").enqueue(new Callback<List<Ciudad>>() {
                 @Override
                 public void onResponse(Call<List<Ciudad>> call, Response<List<Ciudad>> response) {
-                    if (response.isSuccessful()) {
-                        List<Ciudad> ciudadList = response.body();
-                        if (ciudadList != null && !ciudadList.isEmpty()) {
-                            Ciudad ciudad = ciudadList.get(0);
-                            ciudad_search.addAll(ciudadList);
+                    if (response.isSuccessful() && response.body() != null) {
+                        // Limpiar la lista existente antes de agregar nuevos elementos
+                        ciudad_search.clear();
+                        ciudad_search.addAll(response.body());
 
+                        // Verificar si el adaptador ya está configurado
+                        if (fragmentGeoBinding.recycleGeo.getAdapter() == null) {
                             GeoAdapter geoAdapter = new GeoAdapter();
                             geoAdapter.setListaCiudad(ciudad_search);
                             fragmentGeoBinding.recycleGeo.setAdapter(geoAdapter);
                             fragmentGeoBinding.recycleGeo.setLayoutManager(new LinearLayoutManager(getContext()));
-
+                        } else {
+                            // Si el adaptador ya está configurado, simplemente notificar que los datos han cambiado
+                            GeoAdapter geoAdapter = (GeoAdapter) fragmentGeoBinding.recycleGeo.getAdapter();
+                            geoAdapter.setListaCiudad(ciudad_search);
+                            geoAdapter.notifyDataSetChanged();
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
-                    Log.e("fetchInfo", "Error solicitud: " + t.getMessage());
+                    Log.e("fetchInfo", "Error en la solicitud: " + t.getMessage());
                     t.printStackTrace();
                 }
             });
@@ -213,6 +218,10 @@ public class Geo_Fragment extends Fragment {
             Log.d("fetchInfo", "No hay conexión a internet");
         }
     }
+
+
+
+
 
 
     public boolean InternetAccess() {
